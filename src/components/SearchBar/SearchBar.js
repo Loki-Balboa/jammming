@@ -13,9 +13,20 @@ const SearchBar = props => {
         setTerm(e.target.value);
     }
 
+    const handleKeyPress = e => {
+        const enterCode = 13;
+        if (e.which === enterCode) {
+            props.onSearch(term);
+        }
+    }
+
     return (
         <div className="SearchBar">
-            <input placeholder="Enter A Song, Album or Artist" onChange={handleTermChange} />
+            <input
+                placeholder="Enter A Song, Album or Artist"
+                onChange={handleTermChange}
+                onKeyPress={handleKeyPress}
+            />
             <button className="SearchButton" onClick={search}>SEARCH</button>
         </div>
     );
