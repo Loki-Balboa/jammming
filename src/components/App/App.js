@@ -21,9 +21,9 @@ class App extends React.Component {
     this.search = this.search.bind(this);
   }
 
-  // componentDidMount() {
-  //   Spotify.getAccessToken();
-  // }
+  componentDidMount() {
+    Spotify.getAccessToken();
+  }
 
   async search(searchTerm) {
     const tracks = await Spotify.search(searchTerm);
@@ -53,6 +53,7 @@ class App extends React.Component {
 
   savePlaylist() {
     const trackURIs = this.state.playlistTracks.map(track => track.uri);
+    Spotify.savePlaylist(this.state.playlistName, this.state.playlistTracks);
   }
 
   render() {

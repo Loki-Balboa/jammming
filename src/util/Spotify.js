@@ -1,6 +1,6 @@
 let accessToken;
 const clientId = '88e15208e59341738dd548e407fb8d80';
-const redirectUri = 'http://jammmingspotifyapp.surge.sh';
+const redirectUri = 'http://localhost:3000/';
 
 const Spotify = {
     getAccessToken: () => {
@@ -46,11 +46,30 @@ const Spotify = {
         }
     },
 
-    savePlaylist(name, tracks) {
+    savePlaylist: async (name, tracks) => {
         if (name && tracks) {
-
+            const userId = await Spotify.getUserId();
+            Spotify.createPlaylist(userId, name);
         }
         return;
+    },
+
+    getUserId: async () => {
+        const userUrl = 'https://api.spotify.com/v1/me';
+        const response = await fetch(userUrl, {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        })
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+            return jsonResponse.id;
+        } else {
+            console.log('Request failed!');
+        }
+    },
+
+    createPlaylist: async (userId, name) => {
+
     }
 
 };
