@@ -3,7 +3,6 @@ import './Playlist.css';
 import Tracklist from '../Tracklist/Tracklist';
 
 const Playlist = props => {
-
     const handleNameChange = e => {
         props.onNameChange(e.target.value);
     }
@@ -11,7 +10,7 @@ const Playlist = props => {
     return (
         <div className="Playlist">
             <input
-                defaultValue={props.name}
+                value={props.name}
                 onChange={handleNameChange}
             />
             <Tracklist
