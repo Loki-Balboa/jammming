@@ -1,6 +1,17 @@
-let accessToken;
+let accessToken: string;
 const clientId = '88e15208e59341738dd548e407fb8d80';
 const redirectUri = 'http://localhost:3000/';
+
+interface ITrackResponse {
+    id: string;
+    name: string;
+    album: {
+        name: string,
+        images: [{ url: string }]
+    };
+    uri: string;
+    artists: [{ name: string }];
+}
 
 const Spotify = {
     getAccessToken: () => {
@@ -12,16 +23,16 @@ const Spotify = {
 
         if (accessTokenMatch && expiresInMatch) {
             accessToken = accessTokenMatch[1];
-            let expiresIn = expiresInMatch[1];
+            let expiresIn = +expiresInMatch[1];
             window.setTimeout(() => accessToken = '', expiresIn * 1000);
-            window.history.pushState('Access token', null, '/');
+            window.history.pushState('Access token', '', '/');
         } else {
             const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
-            window.location = url;
+            window.location.href = url;
         }
     },
 
-    search: async term => {
+    search: async (term: string) => {
         Spotify.getAccessToken();
         const response = await fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
             headers: { Authorization: `Bearer ${accessToken}` }
@@ -30,7 +41,7 @@ const Spotify = {
         if (response.ok) {
             const jsonResponse = await response.json();
             console.log(jsonResponse);
-            const tracks = jsonResponse.tracks.items.map(track => {
+            const tracks = jsonResponse.tracks.items.map((track: ITrackResponse) => {
                 return {
                     id: track.id,
                     name: track.name,
@@ -46,7 +57,7 @@ const Spotify = {
         }
     },
 
-    savePlaylist: async (name, tracks) => {
+    savePlaylist: async (name: string, tracks: ITrackResponse[]) => {
         if (name && tracks) {
             const userId = await Spotify.getUserId();
             const playlistId = await Spotify.createPlaylist(userId, name);
@@ -72,7 +83,7 @@ const Spotify = {
         }
     },
 
-    createPlaylist: async (userId, name) => {
+    createPlaylist: async (userId: string, name: string) => {
         const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
         const data = { name: name };
         const response = await fetch(url, {
@@ -90,7 +101,7 @@ const Spotify = {
         }
     },
 
-    addTracks: async (playlistId, tracks) => {
+    addTracks: async (playlistId: string, tracks: ITrackResponse[]) => {
         const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
         const data = { uris: tracks.map(track => track.uri) };
         const response = await fetch(url, {

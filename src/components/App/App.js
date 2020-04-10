@@ -4,7 +4,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
-import Spotify from '../../util/Spotify';
+import Spotify from '../../util/Spotify.ts';
 
 const App = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -18,14 +18,16 @@ const App = () => {
   const search = async (searchTerm) => {
     const tracks = await Spotify.search(searchTerm);
     if (tracks) {
-      setSearchResults(tracks);
+      setSearchResults(tracks.filter(track => !playlistTracks.some(playlistTrack => playlistTrack.uri === track.uri)));
     }
   }
 
   const addTrack = (track) => {
     if (!playlistTracks.some(playlistTrack => playlistTrack === track)) {
       const tracks = playlistTracks.concat(track);
+      const resultTracks = searchResults.filter(result => result !== track);
       setPlaylistTracks(tracks);
+      setSearchResults(resultTracks);
     }
   }
 

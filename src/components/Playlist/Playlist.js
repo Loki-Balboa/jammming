@@ -1,6 +1,6 @@
 import React from 'react';
 import './Playlist.css';
-import Tracklist from '../Tracklist/Tracklist';
+import Tracklist from '../Tracklist/Tracklist.tsx';
 
 const Playlist = props => {
     const handleNameChange = e => {

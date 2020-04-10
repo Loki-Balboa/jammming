@@ -16,6 +16,7 @@
 
 .Track-action:hover {
   color: rgba(265, 265, 265, .5);
+  font-size: 120%;
 }
 
 .Track-information {
