@@ -1,7 +1,7 @@
 import { ITrack } from '../components/Track/Track';
 
 let accessToken: string;
-const clientId = '88e15208e59341738dd548e407fb8d80';
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const redirectUri = 'http://localhost:3000/';
 
 interface ITrackResponse {
